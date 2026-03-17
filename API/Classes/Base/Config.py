@@ -179,8 +179,22 @@ PARAMETERS_C = {
         'TotalTechnologyModelPeriodActivityUpperLimit': ['r','t'],
         'CapacityFactor': ['r','t', 'y', 'l'],
         'YearSplit': ['r','y', 'l'],
-        'SpecifiedDemandProfile': ['r','f','y','l']
+        'SpecifiedDemandProfile': ['r','f','y','l'],
+        'ResidualStorageCapacity': ['r','s','y']
     }
+
+OG_PARAMETERS = {
+    'tax_rates': ['chi_b', 'chi_n', 'eta'],
+    'demographics': ['omega', 'fertility', 'mortality'],
+    'economy': ['g_y', 'rho', 'epsilon']
+}
+
+OG_VARIABLES = {
+    'GDP': ['y'],
+    'Consumption': ['c'],
+    'Labor': ['l'],
+    'Capital': ['k']
+}
 
 PARAMETERS_C_full = {
         'DiscountRate': ['r', 'DiscountRate'],
