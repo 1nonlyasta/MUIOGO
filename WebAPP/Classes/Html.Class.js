@@ -51,6 +51,13 @@ export class Html {
                                 </span>
                             </td>
                             <td style="width:40px; text-align:center">
+                                <span data-toggle="modal" data-target="#modalDuplicate">
+                                    <span class="duplicateCS" data-ps="${value}" data-toggle="tooltip" data-placement="top" title="Duplicate model">
+                                        <span class="glyphicon glyphicon-copy text-info icon-btn"></span>
+                                    </span>
+                                </span>
+                            </td>
+                            <td style="width:40px; text-align:center">
                                 <span data-toggle="modal" data-target="#modalcopy">
                                     <span class="copyCS" data-ps="${value}" id="copy_${value}" data-toggle="tooltip" data-placement="top" title="${selectedCS == value ? 'Copy model' : 'Select model first to copy'}">
                                         <span class="glyphicon glyphicon-duplicate text-info icon-btn"></span>

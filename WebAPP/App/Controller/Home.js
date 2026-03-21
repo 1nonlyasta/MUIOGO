@@ -150,7 +150,45 @@ export default class Home {
             });
         });
 
-        //get descrition
+        // duplicate case
+        let _currentDuplicateSource = null;
+        $(document).off('click', '.duplicateCS');
+        $("#cases").off('click', '.duplicateCS');
+        $("#cases").on('click.homeDuplicate', '.duplicateCS', function(e) {
+            e.stopImmediatePropagation();
+            _currentDuplicateSource = $(this).attr('data-ps');
+            // Pre-fill the input with a sensible default
+            $('#duplicateCaseName').val(_currentDuplicateSource + '_copy');
+        });
+
+        $('#confirmDuplicate').off('click.homeDuplicateConfirm');
+        $('#confirmDuplicate').on('click.homeDuplicateConfirm', function() {
+            if (!_currentDuplicateSource) return;
+            const newName = $('#duplicateCaseName').val().trim();
+            if (!newName) {
+                Message.bigBoxWarning('Duplicate message', 'Please enter a name for the new model.', 3000);
+                return;
+            }
+            Base.duplicateCaseStudy(_currentDuplicateSource, newName)
+            .then(response => {
+                $('#modalDuplicate').modal('hide');
+                Message.clearMessages();
+                if (response.status_code === 'success') {
+                    Message.bigBoxSuccess('Duplicate message', response.message, 3000);
+                    Html.apendModel(response.newCasename);
+                    Html.appendCasePicker(response.newCasename, null);
+                }
+                if (response.status_code === 'warning' || response.status_code === 'error') {
+                    Message.bigBoxWarning('Duplicate message', response.message, 4000);
+                }
+            })
+            .catch(error => {
+                $('#modalDuplicate').modal('hide');
+                Message.danger(error);
+            });
+        });
+
+        //get description
         $("#cases").off('click.homeDescription', '.descriptionPS');
         $("#cases").on('click.homeDescription', '.descriptionPS', function(e){
             //e.stopImmediatePropagation();

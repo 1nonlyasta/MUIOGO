@@ -162,6 +162,26 @@ export class Base {
         });
     }
 
+    static duplicateCaseStudy(casename, newCasename) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: this.apiUrl() + "duplicateCase",
+                async: true,
+                type: 'POST',
+                data: JSON.stringify({ "casename": casename, "newCasename": newCasename }),
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (result) {
+                    resolve(result);
+                },
+                error: function (xhr, status, error) {
+                    if (xhr.responseJSON && xhr.responseJSON.message) { error = xhr.responseJSON.message }
+                    reject(error);
+                }
+            });
+        });
+    }
+
     static deleteCaseStudy(casename) {
         return new Promise((resolve, reject) => {
             $.ajax({

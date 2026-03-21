@@ -104,6 +104,62 @@ def copy():
     except OSError:
         raise OSError
 
+@case_api.route("/duplicateCase", methods=['POST'])
+def duplicateCase():
+    try:
+        source_case  = request.json['casename']
+        new_case     = request.json['newCasename']
+        active_case  = session.get('osycase')
+
+        if not active_case:
+            return jsonify({'message': 'No active session.', 'status_code': 'error'}), 403
+        if source_case != active_case:
+            return jsonify({'message': 'Select <b>' + source_case + '</b> first before duplicating it.', 'status_code': 'error'}), 403
+
+        # Sanitize new name
+        import re
+        new_case = new_case.strip()
+        if not new_case:
+            return jsonify({'message': 'New model name cannot be empty.', 'status_code': 'warning'}), 200
+        if re.search(r'[\\/:*?"<>|]', new_case):
+            return jsonify({'message': 'New model name contains invalid characters (<b>\\/:*?&quot;&lt;&gt;|</b>).', 'status_code': 'warning'}), 200
+
+        src  = Path(Config.DATA_STORAGE, source_case)
+        dest = Path(Config.DATA_STORAGE, new_case)
+
+        if os.path.isdir(dest):
+            return jsonify({
+                'message': 'Model <b>' + new_case + '</b> already exists. Please choose a different name.',
+                'status_code': 'warning'
+            }), 200
+
+        # Deep copy excluding res/ solver output directory
+        shutil.copytree(str(src), str(dest), ignore=shutil.ignore_patterns('res'))
+
+        # Recreate empty res/ directory structure
+        os.makedirs(Path(dest, 'res'), exist_ok=True)
+
+        # Reset resData.json so no stale result references exist
+        resDataPath = Path(dest, 'view', 'resData.json')
+        if os.path.isfile(resDataPath):
+            File.writeFile({'osy-cases': []}, resDataPath)
+
+        # Update osy-casename metadata in genData.json
+        genDataPath = Path(dest, 'genData.json')
+        if os.path.isfile(genDataPath):
+            genData = File.readFile(genDataPath)
+            genData['osy-casename'] = new_case
+            File.writeFile(genData, genDataPath)
+
+        return jsonify({
+            'message': 'Model <b>' + source_case + '</b> duplicated as <b>' + new_case + '</b>!',
+            'status_code': 'success',
+            'newCasename': new_case
+        }), 200
+
+    except (IOError, OSError) as e:
+        return jsonify({'message': str(e), 'status_code': 'error'}), 500
+
 @case_api.route("/deleteCase", methods=['POST'])
 def deleteCase():
     try:

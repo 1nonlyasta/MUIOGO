@@ -127,3 +127,29 @@
     </div>
   </div>
 </div>
+
+<!--Modal Duplicate model -->
+<div id="modalDuplicate" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"><i class="fa fa-copy osy"></i> Duplicate model</h4>
+      </div>
+      <div class="modal-body">
+        <p>Enter a name for the duplicate model:</p>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fa fa-tag"></i></span>
+          <input type="text" id="duplicateCaseName" class="form-control" placeholder="New model name" />
+        </div>
+        <small class="text-muted">The new model will be an independent copy without solver results.</small>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="confirmDuplicate">
+          <i class="fa fa-copy"></i> Duplicate
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
