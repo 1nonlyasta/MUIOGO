@@ -159,6 +159,8 @@ export default class Home {
             _currentDuplicateSource = $(this).attr('data-ps');
             // Pre-fill the input with a sensible default
             $('#duplicateCaseName').val(_currentDuplicateSource + '_copy');
+            // Programmatically open the modal since stopImmediatePropagation disables data-toggle
+            $('#modalDuplicate').modal('show');
         });
 
         $('#confirmDuplicate').off('click.homeDuplicateConfirm');
